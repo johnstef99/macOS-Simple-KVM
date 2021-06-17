@@ -5,22 +5,14 @@ VMDIR=$PWD
 OVMF=$VMDIR/firmware
 
 [[ -z "$MEM" ]] && {
-	MEM="1G"
+	MEM="8G"
 }
 
 [[ -z "$CPUS" ]] && {
-	CPUS=1
+	CPUS=12
 }
 
-[[ -z "$SYSTEM_DISK" ]] && {
-    echo "Please set the SYSTEM_DISK environment variable"
-    exit 1
-}
 
-[[ -r "$SYSTEM_DISK" ]] || {
-    echo "Can't read system disk image: $SYSTEM_DISK"
-    exit 1
-}
 
 MOREARGS=()
 
@@ -32,7 +24,7 @@ qemu-system-x86_64 \
     -enable-kvm \
     -m $MEM \
     -machine q35,accel=kvm \
-    -smp $CPUS \
+    -smp 12 \
     -cpu Penryn,vendor=GenuineIntel,kvm=on,+sse3,+sse4.2,+aes,+xsave,+avx,+xsaveopt,+xsavec,+xgetbv1,+avx2,+bmi2,+smep,+bmi1,+fma,+movbe,+invtsc \
     -device isa-applesmc,osk="$OSK" \
     -smbios type=2 \
@@ -47,6 +39,8 @@ qemu-system-x86_64 \
     -device ide-hd,bus=sata.2,drive=ESP \
     -drive id=InstallMedia,format=raw,if=none,file=BaseSystem.img \
     -device ide-hd,bus=sata.3,drive=InstallMedia \
-    -drive id=SystemDisk,if=none,file="${SYSTEM_DISK}" \
+    -drive id=SystemDisk,if=none,file=MacOsDisk.qcow2 \
     -device ide-hd,bus=sata.4,drive=SystemDisk \
     "${MOREARGS[@]}"
+    #-smp $CPUS \
+    #-drive id=SystemDisk,if=none,file="${SYSTEM_DISK}" \

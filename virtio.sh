@@ -9,9 +9,9 @@ OVMF=$VMDIR/firmware
 qemu-system-x86_64 \
     -nodefaults \
     -enable-kvm \
-    -m 2G \
+    -m 8G \
     -machine q35,accel=kvm \
-    -smp 4,cores=2 \
+    -smp cores=4,threads=2 \
     -cpu Penryn,vendor=GenuineIntel,kvm=on,+sse3,+sse4.2,+aes,+xsave,+avx,+xsaveopt,+xsavec,+xgetbv1,+avx2,+bmi2,+smep,+bmi1,+fma,+movbe,+invtsc \
     -device isa-applesmc,osk="$OSK" \
     -smbios type=2 \
@@ -23,4 +23,4 @@ qemu-system-x86_64 \
     -netdev user,id=net0 \
     -device vmxnet3,netdev=net0,id=net0,mac=52:54:00:09:49:17 \
     -drive id=ESP,if=virtio,format=qcow2,file=ESP.qcow2 \
-    -drive id=MyDisk,if=virtio,format=qcow2,file=MyDisk.qcow2 \
+    -drive id=MyDisk,if=virtio,format=qcow2,file=MacOsDisk.qcow2 \
